@@ -1,3 +1,4 @@
+import { RefreshGuard } from './../auth/guard/refresh.guard';
 import { JwtGuard } from './../auth/guard/jwt.guard';
 import {
   Controller,
@@ -18,15 +19,13 @@ import { User } from '@prisma/client';
 
 @Controller('user')
 export class UserController {
-  constructor(
-    private readonly userService: UserService,
-  ) {}
+  constructor(private readonly userService: UserService) {}
 
   @Post()
   create(@Body() createUserDto: CreateUserDto) {
     return this.userService.create(createUserDto);
   }
-  @UseGuards(JwtGuard)
+  @UseGuards(RefreshGuard)
   @Get()
   findAll(@GetUser() user: User) {
     return user;
@@ -42,10 +41,7 @@ export class UserController {
     @Param('id') id: string,
     @Body() updateUserDto: UpdateUserDto,
   ) {
-    return this.userService.update(
-      +id,
-      updateUserDto,
-    );
+    return this.userService.update(+id, updateUserDto);
   }
 
   @Delete(':id')
