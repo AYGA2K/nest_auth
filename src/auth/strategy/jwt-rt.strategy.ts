@@ -12,10 +12,11 @@ import {
   Strategy,
 } from 'passport-jwt';
 import { Request } from 'express';
+import { JwtPayload } from '../types';
 
 @Injectable()
 export class JwtRefreshStrategy extends PassportStrategy(
-  Strategy,
+  Strategy,'jwt-refresh'
 ) {
   constructor(
     config: ConfigService,
@@ -30,10 +31,7 @@ export class JwtRefreshStrategy extends PassportStrategy(
     });
   }
   async validate(
-    payload: {
-      sub: number;
-      email: string;
-    },
+    payload:  JwtPayload,
     req: Request,
   ) {
     const refreshToken = req

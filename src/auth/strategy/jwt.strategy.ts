@@ -7,10 +7,11 @@ import {
   ExtractJwt,
   Strategy,
 } from 'passport-jwt';
+import { JwtPayload } from '../types';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(
-  Strategy,
+  Strategy,'jwt'
 ) {
   constructor(
     config: ConfigService,
@@ -23,10 +24,7 @@ export class JwtStrategy extends PassportStrategy(
       secretOrKey: config.get('SECRET_KEY'),
     });
   }
-  async validate(payload: {
-    sub: number;
-    email: string;
-  }) {
+  async validate(payload: JwtPayload) {
     const user =
       await this.prisma.user.findUnique({
         where: {
